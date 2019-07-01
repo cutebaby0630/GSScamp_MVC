@@ -111,6 +111,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\BookService.cs" />
+    <Compile Include="Models\BookServiceArg.cs" />
     <Compile Include="Models\Book_Data.cs" />
     <Compile Include="Models\CodeService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

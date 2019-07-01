@@ -1,7 +1,84 @@
-﻿
+﻿@model BookSystem.Models.BookServiceArg
+
 @{
     ViewBag.Title = "Index";
 }
 
 <h2>圖書查詢畫面</h2>
 
+@using (Html.BeginForm("Index", "Book_Data", FormMethod.Post, new { id = "Form1" }))
+{
+<div class="form-horizontal">
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.BookName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.BookName, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.BookClassName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.BookClassName, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.KeeperName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.KeeperName, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CodeName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.CodeName, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-10">
+            <input type="submit" value="查詢" />
+            <input type="submit" value="清除" />
+            <input type="submit" value="新增" />
+        </div>
+    </div>
+
+
+    @if (ViewBag.SearchResult != null)
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr id>
+                    <th>圖書類別</th>
+                    <th>書名</th>
+                    <th>購書日期</th>
+                    <th>借閱狀態</th>
+                    <th>借閱人</th>                              
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in (List<BookSystem.Models.Book_Data>)ViewBag.SearchResult)
+                {
+                    <tr id='@item.ClassName'>
+                        <td>@item.BookName</td>                        
+                        <td>@item.BoughtDate.Replace('-', '/')</td>
+                        <td>@item.CodeName</td>
+                        <td>@item.KeeperName</td>                        
+                        <td>
+                            <a class="btnDelete" href="#" onclick="test(this,'@item.BookName');">刪除</a>
+                            <input class="hidEmployeeId" type="hidden" value='@item.BookName' />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+}

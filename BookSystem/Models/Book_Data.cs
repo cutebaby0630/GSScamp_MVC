@@ -7,22 +7,14 @@ namespace BookSystem.Models
 {
     public class Book_Data
     {
-        /// <summary>
-        /// 類別ID
-        /// </summary>
-        public string ClassId { get; set; }
+      
 
         /// <summary>
         /// 類別名稱
         /// </summary>
         public string ClassName { get; set; }
 
-        /// <summary>
-        /// 書本ID
-        /// </summary>
-        public int BookId { get; set; }
- 
-        /// <summary>
+         /// <summary>
         /// 書本名稱 
         /// </summary>
         public string BookName { get; set; }
@@ -60,7 +52,7 @@ namespace BookSystem.Models
         /// <summary>
         /// 借閱人英文名
         /// </summary>
-        public string UserEName { get; set; }
+        public string KeeperName { get; set; }
 
         /// <summary>
         /// 狀態可否借出
