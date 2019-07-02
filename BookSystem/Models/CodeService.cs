@@ -46,23 +46,7 @@ namespace BookSystem.Models
         /// 取得codeTable的部分資料
         /// </summary>
         /// <returns></returns>
-        public List<SelectListItem> GetCodeTable(string type)
-        {
-            DataTable dt = new DataTable();
-            string sql = @"Select Distinct CodeVal As CodeName, CodeId As CodeID 
-                           From dbo.CodeTable 
-                           Where CodeType = @Type";
-            using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
-            {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.Add(new SqlParameter("@Type", type));
-                SqlDataAdapter sqlAdapter = new SqlDataAdapter(cmd);
-                sqlAdapter.Fill(dt);
-                conn.Close();
-            }
-            return this.MapCodeData(dt);
-        }
+     
 
         /// <summary>
         /// Maping 代碼資料

@@ -24,7 +24,7 @@ namespace BookSystem.Models
         /// 依照條件取得資料
         /// </summary>
         /// <returns></returns>
-        public List<Models.Book_Data> GetEmployeeByCondtioin(Models.BookServiceArg arg)
+        public List<Models.Book_Data> GetBookByCondtioin(Models.BookServiceArg arg)
         {
 
             DataTable dt = new DataTable();
@@ -41,13 +41,17 @@ namespace BookSystem.Models
                                 ON bc1.CODE_ID = bd.BOOK_STATUS AND bc1.code_type = 'BOOK_STATUS'
 	                       LEFT JOIN MEMBER_M mm 
                                 ON bd.BOOK_KEEPER = mm.USER_ID
+                           Where (bd.BOOK_NAME LIKE '%'+ @BookName +'%') OR
+                                 (bc.BOOK_CLASS_NAME = @BookClassName) OR
+                                 (mm.USER_ENAME = @KeeperName) OR
+                                 (bc1.CODE_NAME = @CodeName)
                            ORDER BY bc.BOOK_CLASS_NAME;";
 
             using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.Add(new SqlParameter("@BookClassName", arg.BookClassName == null ? string.Empty : arg.BookClassName));
+                cmd.Parameters.Add(new SqlParameter("@BookClassName", arg.ClassName == null ? string.Empty : arg.ClassName));
                 cmd.Parameters.Add(new SqlParameter("@BookName", arg.BookName == null ? string.Empty : arg.BookName));                
                 cmd.Parameters.Add(new SqlParameter("@BoughtDate", arg.BoughtDate == null ? "1900/01/01" : arg.BoughtDate));
                 cmd.Parameters.Add(new SqlParameter("@CodeName", arg.CodeName == null ? string.Empty : arg.CodeName));
@@ -66,7 +70,7 @@ namespace BookSystem.Models
             {
                 result.Add(new Book_Data()
                 {
-                    ClassName = row["ClassName"].ToString(),
+                    ClassName = row["BookClassName"].ToString(),
                     BookName = row["BookName"].ToString(),
                     BoughtDate = row["BoughtDate"].ToString(),
                     CodeName = row["CodeName"].ToString(),

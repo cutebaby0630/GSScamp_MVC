@@ -6,7 +6,7 @@
 
 <h2>圖書查詢畫面</h2>
 
-@using (Html.BeginForm("Index", "Book_Data", FormMethod.Post, new { id = "Form1" }))
+@using (Html.BeginForm("Index", "Book", FormMethod.Post, new { id = "Form1" }))
 {
 <div class="form-horizontal">
 
@@ -18,9 +18,9 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.BookClassName, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.ClassName, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.TextBoxFor(model => model.BookClassName, new { @class = "form-control" })
+            @Html.TextBoxFor(model => model.ClassName, new { @class = "form-control" })
         </div>
     </div>
 
@@ -53,26 +53,28 @@
     {
         <table class="table table-bordered table-striped">
             <thead>
-                <tr id>
-                    <th>圖書類別</th>
-                    <th>書名</th>
-                    <th>購書日期</th>
-                    <th>借閱狀態</th>
-                    <th>借閱人</th>                              
-                    <td></td>
+                <tr >
+                    <th width="10%">圖書類別</th>
+                    <th width="10%">書名</th>
+                    <th width="10%">購書日期</th>
+                    <th width="10%">借閱狀態</th>
+                    <th width="10%">借閱人</th>   
+                    <td width="15%"></td>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in (List<BookSystem.Models.Book_Data>)ViewBag.SearchResult)
                 {
-                    <tr id='@item.ClassName'>
+                    <tr id='@item.BookId'>
+                        <td>@item.ClassName</td>
                         <td>@item.BookName</td>                        
                         <td>@item.BoughtDate.Replace('-', '/')</td>
                         <td>@item.CodeName</td>
                         <td>@item.KeeperName</td>                        
                         <td>
-                            <a class="btnDelete" href="#" onclick="test(this,'@item.BookName');">刪除</a>
-                            <input class="hidEmployeeId" type="hidden" value='@item.BookName' />
+                            <input type="submit" value="借閱紀錄" />
+                            <input type="submit" value="編輯" />
+                            <input type="submit" value="刪除" />
                         </td>
                     </tr>
                 }

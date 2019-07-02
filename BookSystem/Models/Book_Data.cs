@@ -8,6 +8,7 @@ namespace BookSystem.Models
     public class Book_Data
     {
       
+        public int BookId { get; set; }
 
         /// <summary>
         /// 類別名稱

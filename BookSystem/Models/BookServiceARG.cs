@@ -14,7 +14,7 @@ namespace BookSystem.Models
         [DisplayName("書名")]
         public string BookName { get; set; }
         [DisplayName("圖書類別")]
-        public string BookClassName { get; set; }
+        public string ClassName { get; set; }
         [DisplayName("購書日期")]
         public string BoughtDate { get; set; }
         [DisplayName("借閱狀態")]
