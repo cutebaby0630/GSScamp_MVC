@@ -8,79 +8,109 @@
 
 @using (Html.BeginForm("Index", "Book", FormMethod.Post, new { id = "Form1" }))
 {
-<div class="form-horizontal">
+    <div class="form-horizontal">
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.BookName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(model => model.BookName, new { @class = "form-control" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.BookName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.BookName, new { @class = "form-control" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.ClassName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(model => model.ClassName, new { @class = "form-control" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.ClassName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.ClassName, new { @class = "form-control" })
+              
+
+
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.KeeperName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(model => model.KeeperName, new { @class = "form-control" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.KeeperName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.KeeperName, new { @class = "form-control" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.CodeName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(model => model.CodeName, new { @class = "form-control" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.CodeName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.CodeName, new { @class = "form-control" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <div class="col-md-2">
+        <div class="form-group">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-10">
+                <input type="submit" value="查詢" class="k-button k-primary hide-on-narrow" 
+                <button>@Html.ActionLink("清除", "Index")</button>
+                <input type="submit" value="新增" />
+
+            </div>
         </div>
-        <div class="col-md-10">
-            <input type="submit" value="查詢" />
-            <input type="submit" value="清除" />
-            <input type="submit" value="新增" />
-        </div>
-    </div>
 
 
-    @if (ViewBag.SearchResult != null)
-    {
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr >
-                    <th width="10%">圖書類別</th>
-                    <th width="10%">書名</th>
-                    <th width="10%">購書日期</th>
-                    <th width="10%">借閱狀態</th>
-                    <th width="10%">借閱人</th>   
-                    <td width="15%"></td>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in (List<BookSystem.Models.Book_Data>)ViewBag.SearchResult)
-                {
-                    <tr id='@item.BookId'>
-                        <td>@item.ClassName</td>
-                        <td>@item.BookName</td>                        
-                        <td>@item.BoughtDate.Replace('-', '/')</td>
-                        <td>@item.CodeName</td>
-                        <td>@item.KeeperName</td>                        
-                        <td>
-                            <input type="submit" value="借閱紀錄" />
-                            <input type="submit" value="編輯" />
-                            <input type="submit" value="刪除" />
-                        </td>
+        @if (ViewBag.SearchResult != null)
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th width="10%">圖書類別</th>
+                        <th width="10%">書名</th>
+                        <th width="10%">購書日期</th>
+                        <th width="10%">借閱狀態</th>
+                        <th width="10%">借閱人</th>
+                        <td width="15%"></td>
                     </tr>
-                }
-            </tbody>
-        </table>
-    }
-</div>
+                </thead>
+                <tbody>
+                    @foreach (var item in (List<BookSystem.Models.Book_Data>)ViewBag.SearchResult)
+                    {
+                        <tr id='@item.BookId'>
+                            <td>@item.ClassName</td>
+                            <td>@item.BookName</td>
+                            <td>@item.BoughtDate.Replace('-', '/')</td>
+                            <td>@item.CodeName</td>
+                            <td>@item.KeeperName</td>
+                            <td>
+                                <input type="submit" value="借閱紀錄" />
+                                <button class="btnDelete" href="#" onclick="test(this,'@item.BookId');">刪除</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
 
 }
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".btnDelete").click(function (e) {
+            e.preventDefault();
+            var r = confirm("確定要刪除嗎?")
+            var tr = $(this).closest('tr')
+            if (r == true) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Book/DeleteBook",
+                    data: "bookId=" + $(this).next().val(),
+                    dataType: "json",
+                    success: function (response) {
+                        $(tr).remove();
+                    }, error: function (error) {
+                        alert("系統發生錯誤");
+                    }
+                });
+            }
+            else {
+                return false;
+            }
+            
+        });
+    });
+</script>
+ 

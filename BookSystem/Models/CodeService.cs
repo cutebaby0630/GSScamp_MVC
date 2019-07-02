@@ -23,17 +23,16 @@ namespace BookSystem.Models
         /// 取得書本資料
         /// </summary>
         /// <returns></returns>
-        public List<SelectListItem> GetBook(string bookId)
+        public List<SelectListItem> GetBookClass(string classId)
         {
             DataTable dt = new DataTable();
-            string sql = @"SELECT bd.BOOK_ID AS CodeId, bd.BOOK_NAME AS CodeName 
-                           FROM BOOK_DATA bd  
-                           WHERE BookID != @Book_ID";
+            string sql = @"SELECT BOOK_CLASS_ID AS ClssId,bc.BOOK_CLASS_NAME AS ClassName
+                            FROM BOOK_CLASS bc WHERE bc.BOOK_CLASS_ID != @CLassId";
             using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.Add(new SqlParameter("@Book_ID", bookId));
+                cmd.Parameters.Add(new SqlParameter("@CLassId", classId));
                 SqlDataAdapter sqlAdapter = new SqlDataAdapter(cmd);
 
                 sqlAdapter.Fill(dt);
@@ -46,7 +45,23 @@ namespace BookSystem.Models
         /// 取得codeTable的部分資料
         /// </summary>
         /// <returns></returns>
-     
+        public List<SelectListItem> GetCodeTable(string classId)
+        {
+            DataTable dt = new DataTable();
+            string sql = @"SELECT DISTINCT BOOK_CLASS_ID AS CodeId, BOOK_CLASS_NAME AS CodeName 
+                           FROM BOOK_CLASS WHERE bc.BOOK_CLASS_ID != @CLassId";
+            using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.Add(new SqlParameter("@CLassId", classId));
+                SqlDataAdapter sqlAdapter = new SqlDataAdapter(cmd);
+                sqlAdapter.Fill(dt);
+                conn.Close();
+            }
+            return this.MapCodeData(dt);
+        }
+
 
         /// <summary>
         /// Maping 代碼資料
@@ -60,7 +75,7 @@ namespace BookSystem.Models
             {
                 result.Add(new SelectListItem()
                 {
-                    Text = row["CodeId"].ToString() + '-' + row["CodeName"].ToString(),
+                    Text = row["CodeId"].ToString() ,
                     Value = row["CodeId"].ToString()
                 });
             }

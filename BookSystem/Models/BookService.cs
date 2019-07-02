@@ -52,7 +52,7 @@ namespace BookSystem.Models
                 conn.Open();
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 cmd.Parameters.Add(new SqlParameter("@BookClassName", arg.ClassName == null ? string.Empty : arg.ClassName));
-                cmd.Parameters.Add(new SqlParameter("@BookName", arg.BookName == null ? string.Empty : arg.BookName));                
+                cmd.Parameters.Add(new SqlParameter("@BookName", arg.BookName == null ? string.Empty : arg.BookName));
                 cmd.Parameters.Add(new SqlParameter("@BoughtDate", arg.BoughtDate == null ? "1900/01/01" : arg.BoughtDate));
                 cmd.Parameters.Add(new SqlParameter("@CodeName", arg.CodeName == null ? string.Empty : arg.CodeName));
                 cmd.Parameters.Add(new SqlParameter("@KeeperName", arg.KeeperName == null ? string.Empty : arg.KeeperName));
@@ -63,6 +63,28 @@ namespace BookSystem.Models
             return this.MapBookDataToList(dt);
         }
 
+        /// <summary>
+        /// 刪除資料
+        /// </summary>
+        public void DeleteEmployeeById(string BookId)
+        {
+            try
+            {
+                string sql = "DELETE FROM BOOK_DATA WHERE Book_Id = @BookId";
+                using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    cmd.Parameters.Add(new SqlParameter("@BookId", BookId));
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         private List<Models.Book_Data> MapBookDataToList(DataTable bookData)
         {
             List<Models.Book_Data> result = new List<Book_Data>();
