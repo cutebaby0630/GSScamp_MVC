@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+
 namespace BookSystem.Controllers
 {
     public class BookController : Controller
@@ -16,6 +17,9 @@ namespace BookSystem.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
+            ViewBag.ClassName = this.codeService.GetBookClassId("ClassName");
+            ViewBag.KeeperName = this.codeService.GetMember("KeeperName");
+            ViewBag.CodeName = this.codeService.GetCodeName("CodeName");
             return View();
         }
 
@@ -28,10 +32,9 @@ namespace BookSystem.Controllers
         {
             Models.BookService bookService = new Models.BookService();
             ViewBag.SearchResult = bookService.GetBookByCondtioin(arg);
-            ViewBag.JobTitleCodeData = this.codeService.GetCodeTable("TITLE");
-            ViewBag.CountryCodeData = this.codeService.GetCodeTable("COUNTRY");
-            ViewBag.CityCodeData = this.codeService.GetCodeTable("CsITY");
-
+            ViewBag.ClassName = this.codeService.GetBookClassId("ClassName");
+            ViewBag.KeeperName = this.codeService.GetMember("KeeperName");
+            ViewBag.CodeName = this.codeService.GetCodeName("CodeName");
             return View("Index");
         }
 
@@ -45,15 +48,43 @@ namespace BookSystem.Controllers
         {
             try
             {
-                Models.BookService EmployeeService = new Models.BookService();
-                EmployeeService.DeleteEmployeeById(bookId);
+                Models.BookService BookService = new Models.BookService();
+                BookService.DeleteEmployeeById(bookId);
                 return this.Json(true);
             }
 
-            catch (Exception ex)
+            catch (Exception )
             {
                 return this.Json(false);
             }
         }
+        /// <summary>
+        /// 新增畫面
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet()]
+        public ActionResult InsertBook()
+        {
+            ViewBag.ClassName = this.codeService.GetBookClassId("ClassName");
+            return View(new Models.BookData());
+        }
+
+        /// <summary>
+        /// 新增書籍
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <returns></returns>
+        [HttpPost()]
+        public ActionResult InsertBook(Models.BookData bookdata)
+        {
+            ViewBag.ClassName = this.codeService.GetBookClassId("ClassName");
+            if (ModelState.IsValid)
+            {
+                Models.BookService bookService = new Models.BookService();
+                bookService.InsertBook(bookdata);
+                TempData["message"] = "存檔成功";
+            }
+            return View(bookdata);
+        }
     }
-    }
+ }

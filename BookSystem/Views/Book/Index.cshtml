@@ -20,24 +20,21 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ClassName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBoxFor(model => model.ClassName, new { @class = "form-control" })
-              
-
-
+                @Html.DropDownListFor(model => model.ClassName, (List<SelectListItem>)ViewBag.ClassName, "", new { @class = "form-control" })
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.KeeperName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBoxFor(model => model.KeeperName, new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.KeeperName, (List<SelectListItem>)ViewBag.KeeperName, "", new { @class = "form-control" })
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.CodeName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBoxFor(model => model.CodeName, new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.CodeName, (List<SelectListItem>)ViewBag.CodeName, "", new { @class = "form-control" })
             </div>
         </div>
 
@@ -45,10 +42,9 @@
             <div class="col-md-2">
             </div>
             <div class="col-md-10">
-                <input type="submit" value="查詢" class="k-button k-primary hide-on-narrow" 
-                <button>@Html.ActionLink("清除", "Index")</button>
-                <input type="submit" value="新增" />
-
+                <input type="submit" class="btn btn-primary" value="查詢" />
+                <input type="button" value="清除" class="btn btn-default" onclick="location.href = '/Book/Index'" />
+                <input type="button" value="新增" class="btn btn-default" onclick="location.href = '/Book/InsertBook'" />
             </div>
         </div>
 
@@ -63,11 +59,13 @@
                         <th width="10%">購書日期</th>
                         <th width="10%">借閱狀態</th>
                         <th width="10%">借閱人</th>
-                        <td width="15%"></td>
+                        <td width="5%"></td>
+                        <td width="5%"></td>
+                        <td width="5%"></td>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in (List<BookSystem.Models.Book_Data>)ViewBag.SearchResult)
+                    @foreach (var item in (List<BookSystem.Models.BookData>)ViewBag.SearchResult)
                     {
                         <tr id='@item.BookId'>
                             <td>@item.ClassName</td>
@@ -76,8 +74,14 @@
                             <td>@item.CodeName</td>
                             <td>@item.KeeperName</td>
                             <td>
-                                <input type="submit" value="借閱紀錄" />
-                                <button class="btnDelete" href="#" onclick="test(this,'@item.BookId');">刪除</button>
+                                <input type="button" class="btn btn-default" value="借閱紀錄" />
+                            </td>
+                            <td>
+                                <input type="button" class="btn btn-default" value="編輯" />
+                            </td>
+                            <td>
+                                <input type="button" class="btn btn-danger bt_delete" href="#" value="刪除" />
+                                <input class="hidEmployeeId" type="hidden" value='@item.BookId' />
                             </td>
                         </tr>
                     }
@@ -89,10 +93,11 @@
 }
 <script type="text/javascript">
     $(document).ready(function () {
-        $(".btnDelete").click(function (e) {
+        $(".bt_delete").click(function (e) {
             e.preventDefault();
             var r = confirm("確定要刪除嗎?")
             var tr = $(this).closest('tr')
+            console.log(tr);
             if (r == true) {
                 $.ajax({
                     type: "POST",

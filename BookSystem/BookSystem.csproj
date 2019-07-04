@@ -113,7 +113,7 @@
     </Compile>
     <Compile Include="Models\BookService.cs" />
     <Compile Include="Models\BookServiceArg.cs" />
-    <Compile Include="Models\Book_Data.cs" />
+    <Compile Include="Models\BookData.cs" />
     <Compile Include="Models\CodeService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -133,6 +133,7 @@
     <Content Include="Views\Book\Index.cshtml" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+    <Content Include="Views\Book\InsertBook.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

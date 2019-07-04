@@ -21,5 +21,14 @@ namespace BookSystem.Models
         public string CodeName { get; set; }
         [DisplayName("借閱人")]
         public string KeeperName { get; set; }
+        [DisplayName("作者")]
+        public string BookAuthor { get; set; }
+        [DisplayName("出版商")]
+        public string Publisher { get; set; }
+         [DisplayName("內容簡介")]
+        public string BookNote { get; set; }
+        public string CodeId { get; set; }
+        public string ClassId { get; set; }
+        public string BookId { get; set; }
     }
 }
