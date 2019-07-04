@@ -68,11 +68,11 @@ namespace BookSystem.Models
         /// <summary>
         /// 刪除資料
         /// </summary>
-        public void DeleteEmployeeById(string bookId)
+        public void DeleteBookById(string bookId)
         {
             try
             {
-                string sql = "DELETE FROM BOOK_DATA WHERE BOOK_ID = @BookId";
+                string sql = "DELETE FROM BOOK_DATA WHERE BOOK_ID = @BookId ";
                 using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
                 {
                     conn.Open();
@@ -89,26 +89,20 @@ namespace BookSystem.Models
         }
  
         /// <summary>
-        /// 新增員工
+        /// 新增書籍資料
         /// </summary>
-        /// <param name="employee"></param>
-        /// <returns>員工編號</returns>
-        public int InsertBook(Models.BookData bookdata)
+        public void InsertBook(Models.BookData bookdata)
         {
             string sql = @" INSERT INTO BOOK_DATA
                          (
-                            BOOK_ID,BOOK_NAME,BOOK_CLASS_ID,BOOK_AUTHOR,BOOK_BOUGHT_DATE,BOOK_PUBLISHER,
+                            BOOK_NAME,BOOK_CLASS_ID,BOOK_AUTHOR,BOOK_BOUGHT_DATE,BOOK_PUBLISHER,
 					        BOOK_NOTE,BOOK_STATUS
                           )
 		                 VALUES
                           (
                             @BOOK_NAME,@BOOK_CLASS_ID,@BOOK_AUTHOR,
                             @BOOK_BOUGHT_DATE,@BOOK_PUBLISHER,@BOOK_NOTE,'A'
-                           )
-                          Select SCOPE_IDENTITY()";
-            int BookId;     
-
-
+                           )";
             using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
             {
                 conn.Open();
@@ -119,10 +113,38 @@ namespace BookSystem.Models
                 cmd.Parameters.Add(new SqlParameter("@BOOK_PUBLISHER", bookdata.Publisher));
                 cmd.Parameters.Add(new SqlParameter("@BOOK_BOUGHT_DATE", bookdata.BoughtDate));
                 cmd.Parameters.Add(new SqlParameter("@BOOK_NOTE", bookdata.BookNote));
-                BookId = Convert.ToInt32(cmd.ExecuteScalar());
+                cmd.ExecuteNonQuery();
                 conn.Close();
             }
-            return BookId;
+        }
+        /// <summary>
+        /// 調閱紀錄
+        /// </summary>
+        public void LendBookById(string bookId)
+        {
+            try
+            {
+                string sql = @" SELECT  
+                                    FORMAT(blr.LEND_DATE,'yyyy/MM/dd') AS LENDDATE,
+                                    blr.KEEPER_ID AS KeeperId,
+                                    mm.USER_ENAME AS KeeperName,
+                                    mm.USER_CNAME AS KeeperCName 
+                                FROM BOOK_LEND_RECORD blr
+                                JOIN MEMBER_M mm ON mm.USER_ID = blr.KEEPER_ID
+                                WHERE blr.BOOK_ID = @BookId";
+                using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    cmd.Parameters.Add(new SqlParameter("@BookId", bookId));
+                    cmd.ExecuteNonQuery();
+                    conn.Close();s
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
         private List<Models.BookData> MapBookDataToList(DataTable bookData)
         {

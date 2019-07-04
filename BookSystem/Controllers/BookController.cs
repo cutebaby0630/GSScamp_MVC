@@ -14,7 +14,6 @@ namespace BookSystem.Controllers
         /// <summary>
         /// 員工資料查詢
         /// </summary>
-        /// <returns></returns>
         public ActionResult Index()
         {
             ViewBag.ClassName = this.codeService.GetBookClassId("ClassName");
@@ -26,7 +25,6 @@ namespace BookSystem.Controllers
         /// <summary>
         /// 書本資料查詢
         /// </summary>
-        /// <returns></returns>
         [HttpPost()]
         public ActionResult Index(Models.BookServiceArg arg)
         {
@@ -41,15 +39,13 @@ namespace BookSystem.Controllers
         /// <summary>
         /// 刪除員工
         /// </summary>
-        /// <param name="employeeId"></param>
-        /// <returns></returns>
         [HttpPost()]
         public JsonResult DeleteBook(string bookId)
         {
             try
             {
                 Models.BookService BookService = new Models.BookService();
-                BookService.DeleteEmployeeById(bookId);
+                BookService.DeleteBookById(bookId);
                 return this.Json(true);
             }
 
@@ -72,8 +68,6 @@ namespace BookSystem.Controllers
         /// <summary>
         /// 新增書籍
         /// </summary>
-        /// <param name="employee"></param>
-        /// <returns></returns>
         [HttpPost()]
         public ActionResult InsertBook(Models.BookData bookdata)
         {
@@ -86,5 +80,35 @@ namespace BookSystem.Controllers
             }
             return View(bookdata);
         }
+
+        /// <summary>
+        /// 借閱紀錄畫面
+        /// </summary>
+        [HttpGet()]
+        public ActionResult LendBook()
+        {
+            return View(new Models.BookData());
+        }
+
+        /// <summary>
+        /// 借書紀錄查詢
+        /// </summary>
+        [HttpPost()]
+        public JsonResult LendBook(string bookId)
+        {
+            
+            try
+            {
+                Models.BookService BookService = new Models.BookService();
+                BookService.LendBookById(bookId);
+                ViewBag.SearchResult = BookService.LendBookById(bookId);
+                return this.Json(true);
+            }
+
+            catch (Exception)
+            {
+                return this.Json(false);
+            }
+        }
     }
- }
+}

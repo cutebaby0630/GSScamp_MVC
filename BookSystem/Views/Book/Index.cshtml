@@ -74,7 +74,7 @@
                             <td>@item.CodeName</td>
                             <td>@item.KeeperName</td>
                             <td>
-                                <input type="button" class="btn btn-default" value="借閱紀錄" />
+                                <input type="button" value="借閱紀錄" class="btn btn-default" onclick="location.href = '/Book/LendBook'" />
                             </td>
                             <td>
                                 <input type="button" class="btn btn-default" value="編輯" />
@@ -97,7 +97,6 @@
             e.preventDefault();
             var r = confirm("確定要刪除嗎?")
             var tr = $(this).closest('tr')
-            console.log(tr);
             if (r == true) {
                 $.ajax({
                     type: "POST",
@@ -106,6 +105,7 @@
                     dataType: "json",
                     success: function (response) {
                         $(tr).remove();
+                        alert("刪除成功");
                     }, error: function (error) {
                         alert("系統發生錯誤");
                     }

@@ -17,8 +17,7 @@ namespace BookSystem.Models
         /// </summary>
         [DisplayName("圖書類別")]
         public string ClassId { get; set; }
-        [Required(ErrorMessage = "此欄位必填")]
-
+        
         /// <summary>
         /// 類別名稱
         /// </summary>
@@ -29,14 +28,12 @@ namespace BookSystem.Models
         /// 書本名稱 
         /// </summary>
         [DisplayName("書名")]
-       [Required(ErrorMessage = "此欄位必填")]
         public string BookName { get; set; }
 
         /// <summary>
         /// 書本作者
         /// </summary>
         [DisplayName("作者")]
-        [Required(ErrorMessage = "此欄位必填")]
         public string BookAuthor { get; set; }
 
         /// <summary>
@@ -49,14 +46,12 @@ namespace BookSystem.Models
         /// 購買日期
         /// </summary>
         [DisplayName("購書日期")]
-        [Required(ErrorMessage = "此欄位必填")]
         public string BoughtDate { get; set; }
 
         /// <summary>
         /// 出版社
         /// </summary>
         [DisplayName("出版商")]
-        [Required(ErrorMessage = "此欄位必填")]
         public string Publisher { get; set; }
 
         /// <summary>
@@ -84,6 +79,15 @@ namespace BookSystem.Models
         /// </summary>
         public string KeeperName { get; set; }
 
+        /// <summary>
+        /// 借閱人中文姓名
+        /// </summary>
+        public string KeeperCName { get; set; }
+
+        /// <summary>
+        /// 借閱日期
+        /// </summary>
+        public string LendDate { get; set; }
    
 
     }
