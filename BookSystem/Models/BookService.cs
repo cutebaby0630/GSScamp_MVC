@@ -117,35 +117,6 @@ namespace BookSystem.Models
                 conn.Close();
             }
         }
-        /// <summary>
-        /// 調閱紀錄
-        /// </summary>
-        public void LendBookById(string bookId)
-        {
-            try
-            {
-                string sql = @" SELECT  
-                                    FORMAT(blr.LEND_DATE,'yyyy/MM/dd') AS LENDDATE,
-                                    blr.KEEPER_ID AS KeeperId,
-                                    mm.USER_ENAME AS KeeperName,
-                                    mm.USER_CNAME AS KeeperCName 
-                                FROM BOOK_LEND_RECORD blr
-                                JOIN MEMBER_M mm ON mm.USER_ID = blr.KEEPER_ID
-                                WHERE blr.BOOK_ID = @BookId";
-                using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
-                {
-                    conn.Open();
-                    SqlCommand cmd = new SqlCommand(sql, conn);
-                    cmd.Parameters.Add(new SqlParameter("@BookId", bookId));
-                    cmd.ExecuteNonQuery();
-                    conn.Close();s
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
         private List<Models.BookData> MapBookDataToList(DataTable bookData)
         {
             List<Models.BookData> result = new List<BookData>();
@@ -159,6 +130,53 @@ namespace BookSystem.Models
                     BoughtDate = row["BoughtDate"].ToString(),
                     CodeName = row["CodeName"].ToString(),
                     KeeperName = row["KeeperName"].ToString()
+                });
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 調閱紀錄
+        /// </summary>
+        public List<Models.LendData> LendBookById(int bookId)
+        {
+            DataTable dt = new DataTable();
+            string sql = @"SELECT 
+                            FORMAT(blr.LEND_DATE,'yyyy/mm/dd') AS LendDate,
+                            blr.KEEPER_ID AS KeeperId,
+                            mm.USER_ENAME AS UserEname,
+                            mm.USER_CNAME AS UserCname
+                            FROM 
+                            BOOK_LEND_RECORD blr JOIN MEMBER_M mm
+                            ON blr.KEEPER_ID = mm.USER_ID
+                            WHERE blr.BOOK_ID = @BookId";
+
+            using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.Add(new SqlParameter("@BookId", bookId));
+
+                SqlDataAdapter sqlAdapter = new SqlDataAdapter(cmd);
+                sqlAdapter.Fill(dt);
+                conn.Close();
+            }
+            return this.MapRecordDataToList(dt);
+        }
+
+        private List<LendData> MapRecordDataToList(DataTable dt)
+        {
+            List<Models.LendData> result = new List<LendData>();
+            foreach (DataRow row in dt.Rows)
+            {
+                result.Add(new LendData()
+                {
+                    LendDate = row["LendDate"].ToString(),
+                    KeeperId = row["KeeperId"].ToString(),
+                    KeeperName = row["UserEname"].ToString(),
+                    KeeperCName = row["UserCname"].ToString()
+
+
                 });
             }
             return result;

@@ -74,14 +74,15 @@
                             <td>@item.CodeName</td>
                             <td>@item.KeeperName</td>
                             <td>
-                                <input type="button" value="借閱紀錄" class="btn btn-default" onclick="location.href = '/Book/LendBook'" />
+                                <input type="button" class="btn btn-default" value="借閱紀錄" />
+                                
                             </td>
                             <td>
                                 <input type="button" class="btn btn-default" value="編輯" />
                             </td>
                             <td>
                                 <input type="button" class="btn btn-danger bt_delete" href="#" value="刪除" />
-                                <input class="hidEmployeeId" type="hidden" value='@item.BookId' />
+                                <input class="hidBookId" type="hidden" value='@item.BookId' />
                             </td>
                         </tr>
                     }

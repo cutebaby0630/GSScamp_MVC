@@ -85,30 +85,13 @@ namespace BookSystem.Controllers
         /// 借閱紀錄畫面
         /// </summary>
         [HttpGet()]
-        public ActionResult LendBook()
+        public ActionResult LendBookReasult(int bookId)
         {
-            return View(new Models.BookData());
+            Models.BookService bookService = new Models.BookService();
+            ViewBag.LendResult = bookService.LendBookById(bookId);
+            return View();
         }
 
-        /// <summary>
-        /// 借書紀錄查詢
-        /// </summary>
-        [HttpPost()]
-        public JsonResult LendBook(string bookId)
-        {
-            
-            try
-            {
-                Models.BookService BookService = new Models.BookService();
-                BookService.LendBookById(bookId);
-                ViewBag.SearchResult = BookService.LendBookById(bookId);
-                return this.Json(true);
-            }
-
-            catch (Exception)
-            {
-                return this.Json(false);
-            }
-        }
+        }   
     }
-}
+
